@@ -1,29 +1,5 @@
-No know bugs. 
-All algorithms favor diagonal movement/mismatch over gaps. 
-Thanks!
+#Affine Alignment Algorithm
+Favors diagonal movement/mismatch over gaps. No known bugs.
 
-Test cases:
-    \n
-    \n
 
-    A
-    \n
-
-    \n
-    A
-
-    C
-    A
-
-    ATCGGC
-    AGC
-
-    NAUTILUS
-    WALRUS
-
-    AAAGAATTCA
-    AAATCA
-
-    ATA
-    ATT
 
