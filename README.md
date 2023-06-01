@@ -1,8 +1,9 @@
 # Affine Alignment Algorithm
-No know bugs. 
-All algorithms favor diagonal movement/mismatch over gaps. 
 
 Favors diagonal movement/mismatch over gaps. No known bugs.
 
-
-
+## To-Do: 
+- set-up function
+- README use instructions
+- function documentation!!
+- make data structures to hold DP table info
