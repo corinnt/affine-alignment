@@ -33,6 +33,7 @@ backpointers_dict[(0, 0, 3)] = (0, 0, 0)
 
 #instantiate top row and left column of dp_tables + add pointers to dict
 def instantiate_table_edges():
+    
     for i in range(1, len_m + 1): 
         dp_table_best[0][i] = (gap_open_penalty + (i * gap_ext_penalty))
         dp_table_v_gap[0][i] = (gap_open_penalty + (i * gap_ext_penalty))
