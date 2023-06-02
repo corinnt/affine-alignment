@@ -31,7 +31,6 @@ class StringPair():
                 u_index -= 1
             elif (direction[1] == 0 and direction[0] != 0):
                 aligned_u = "-" + aligned_u
-
         return aligned_u, aligned_v
     
 class DPTables():
@@ -43,12 +42,18 @@ class DPTables():
         self.v_gap = empty_table.copy()
         self.backpointers = {}
         for i in range(3): self.backpointers[(0, 0, i + 1)] = (0, 0, 0)
+        print(self.backpointers)
 
     def final_score(self):
         """ Returns the final score : str in the bottom right of the overall/best DP table
             
         """
         return str(self.best[-1][-1])
+    
+    def __str__(self):
+        rep = ""
+        for line in self.best: rep += str(line) + "\n"
+        return rep
 
 class Scoring():
     def __init__(self, matrix_lines, open, extension) -> None:
@@ -127,7 +132,6 @@ def fill_dp_tables(strings, tables, scoring):
                 left = extend_left_cost
                 # point from j, i dp_table_u_gap to dp_table_u_gap j, i - 1
                 tables.backpointers[(j, i, 3)] = (0, - 1, 3)
-         
         # update all sub dp_tables
             tables.diag[j][i] = diag 
             tables.v_gap[j][i] = up
@@ -145,6 +149,8 @@ def fill_dp_tables(strings, tables, scoring):
                 direction = (0, -1, 3) # got val from dp_table_u_gap
             tables.backpointers[(j, i, 0)] = direction
             tables.backpointers[(j, i, 1)] = (-1, -1, 0)
+
+    print(tables)
 
 def find_path(strings, tables):
     """ Given a StringPair and DPTables, returns a list[tuples]
@@ -169,8 +175,7 @@ def main():
     fill_dp_tables(strings, tables, scoring)
     path : list[tuple] = find_path(strings, tables)
     aligned_u, aligned_v = strings.align_from_path(path)
-    sys.stdout.write(aligned_u + '\n')
-    sys.stdout.write(aligned_v  + '\n')
+    sys.stdout.write(aligned_u + '\n' + aligned_v + "\n")
     sys.stdout.write(tables.final_score() + '\n')
 
 if __name__ == "__main__":
