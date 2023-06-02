@@ -1,5 +1,5 @@
 import sys
-from xml.etree.ElementPath import get_parent_map
+#from xml.etree.ElementPath import get_parent_map
 
 class StringPair():
     def __init__(self, str_u, str_v) -> None:
@@ -35,12 +35,14 @@ class StringPair():
         return aligned_u, aligned_v
     
 class DPTables():
-    def __init__(self) -> None:
-        self.best = []
-        self.diag = []
-        self.u_gap = []
-        self.v_gap = []
+    def __init__(self, strings) -> None:
+        empty_table = [[0 for _ in range(strings.len_m + 1)] for _ in range(strings.len_n + 1)]
+        self.best = empty_table.copy()
+        self.diag = empty_table.copy()
+        self.u_gap = empty_table.copy()
+        self.v_gap = empty_table.copy()
         self.backpointers = {}
+        for i in range(3): self.backpointers[(0, 0, i + 1)] = (0, 0, 0)
 
     def final_score(self):
         """ Returns the final score : str in the bottom right of the overall/best DP table
@@ -75,18 +77,11 @@ def parse_args():
     scoring = Scoring(matrix_lines, gap_open_penalty, gap_ext_penalty)
     return strings, scoring
 
-def instantiate_dp_tables(strings : StringPair, tables : DPTables, scoring : Scoring):
-    tables_list = [tables.best, tables.diag, tables.u_gap, tables.v_gap]
-    for table in tables_list:
-        table = [[0 for _ in range(strings.len_m + 1)] for _ in range(strings.len_n + 1)]
-    # POSSBUG: are these by pointer or value? grayed out as unused var
-    for i in range(3): tables.backpointers[(0, 0, i + 1)] = (0, 0, 0)
-    instantiate_table_edges(tables, tables, scoring)
-
-#instantiate top row and left column of dp_tables + add pointers to dict
 def instantiate_table_edges(strings : StringPair, tables : DPTables, scoring : Scoring):
+    """ Instantiate top row and left column of DPTables + add backtracking pointers to dict
+    """
     for i in range(1, strings.len_m + 1): 
-        tables.best[0][i] = ( + (i * scoring.extension))
+        tables.best[0][i] = (scoring.open + (i * scoring.extension))
         tables.v_gap[0][i] = (scoring.open + (i * scoring.extension))
         tables.u_gap[0][i] = float('-inf')
         tables.backpointers[(0, i, 0)] = (0, -1, 0)
@@ -168,11 +163,11 @@ def find_path(strings, tables):
     return path
 
 def main():
-    tables = DPTables()
-    instantiate_dp_tables(tables)
     strings, scoring = parse_args()
-    fill_dp_tables(tables, scoring)
-    path : list[tuple] = find_path(strings, scoring)
+    tables = DPTables(strings)
+    instantiate_table_edges(strings, tables, scoring)
+    fill_dp_tables(strings, tables, scoring)
+    path : list[tuple] = find_path(strings, tables)
     aligned_u, aligned_v = strings.align_from_path(path)
     sys.stdout.write(aligned_u + '\n')
     sys.stdout.write(aligned_v  + '\n')
