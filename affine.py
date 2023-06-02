@@ -99,7 +99,7 @@ def instantiate_table_edges(strings : StringPair, tables : DPTables, scoring : S
         tables.backpointers[(j, 0, 3)] = (-1, 0, 3)
 
 
-def fill_dp_tables(strings, tables, scoring):
+def calculate_alignments(strings, tables, scoring):
     """ Perform DP calculations for optimal alignment 
         while adding backpointers to dictionary to reconstruct path through tables
     """
@@ -172,7 +172,7 @@ def main():
     strings, scoring = parse_args()
     tables = DPTables(strings)
     instantiate_table_edges(strings, tables, scoring)
-    fill_dp_tables(strings, tables, scoring)
+    calculate_alignments(strings, tables, scoring)
     path : list[tuple] = find_path(strings, tables)
     aligned_u, aligned_v = strings.align_from_path(path)
     sys.stdout.write(aligned_u + '\n' + aligned_v + "\n")
