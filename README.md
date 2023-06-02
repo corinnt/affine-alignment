@@ -3,7 +3,6 @@
 Favors diagonal movement/mismatch over gaps. No known bugs.
 
 ## To-Do: 
-- set-up function
+- fix what I broke when refactoring - currently runs but is super wrong
 - README use instructions
 - function documentation!!
-- make data structures to hold DP table info
